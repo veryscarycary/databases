@@ -9,7 +9,6 @@ var headers = {
   'access-control-max-age': 10 // seconds
 };
 
-console.log('top')
 module.exports = {
   messages: {
     get: function (req, res) {
@@ -35,19 +34,18 @@ module.exports = {
       var userObj = {};
       var messageObj = {};
 
-      roomObj['name'] = req.body.room;
+      roomObj['name'] = req.body.roomname;
       userObj['name'] = req.body.username;
       messageObj = {
-        text: req.body.text
+        text: req.body.text,
+        createdAt: new Date()
       };
       
 
       var postToServer = function () {
-        debugger;
         connection.query('INSERT INTO rooms SET ?', roomObj, 
           function (err, result) {
-            if (err) throw err;
-            console.log('1')
+            if (err) { throw err; }
             // res.send('User added to database with ID: ' + result.insertId);
           }
         );
@@ -55,18 +53,15 @@ module.exports = {
 
         connection.query('INSERT INTO users SET ?', userObj, 
           function (err, result) {
-            if (err) throw err;
+            if (err) { throw err; }
             // res.send('User added to database with ID: ' + result.insertId);
-                        console.log('2')
 
           }
         );
         
-        connection.query('select id from rooms where name = ?', req.body.room, 
+        connection.query('select id from rooms where name = ?', req.body.roomname, 
           function(err, result) {
-            console.log(result[0]['id'], 'room!!!!!')
             messageObj['roomId'] = result[0]['id'];
-                        console.log('3')
 
             
           }
@@ -74,12 +69,7 @@ module.exports = {
 
         connection.query('select id from users where name = ?', req.body.username, 
               function(err, result) {
-                // var result = ' ' + result;
-                console.log(result[0]['id'], 'user!!!!!')
                 messageObj['userId'] = result[0]['id'];
-                            console.log('4')
-
-                console.log(messageObj)
               }
         );
 
@@ -88,14 +78,12 @@ module.exports = {
             console.log(result);
             if (err) { throw err; }
             res.send('User added to database with ID: ' + result.insertId);
-                        console.log('5')
 
           }
         );
       };
 
       var promisifiedPostToServer = Promise.promisify(postToServer);
-      console.log('PROMISIFYYYY', promisifiedPostToServer);
       promisifiedPostToServer();
     }, // a function which handles posting a message to the database
     options: function (req, res) {
@@ -116,7 +104,7 @@ module.exports = {
 
       connection.query('INSERT INTO users SET ?', req.body, 
         function (err, result) {
-          if (err) throw err;
+          if (err) { throw err; }
           res.send('User added to database with ID: ' + result.insertId);
         }
       );

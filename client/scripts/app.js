@@ -71,11 +71,11 @@ app.fetch = function () {
     success: function(data) {
       // console.log(json);
       // var data = JSON.parse(json);
-      if ( app.lastMessage !== data.results[0].objectId ) {
+
+      if ( app.lastMessage !== data.results[data.results.length - 1].ObjectId ) {
         app.clearMessages();
-        app.lastMessage = data.results[0].objectId;
+        app.lastMessage = data.results[data.results.length - 1].ObjectId;
         for ( var i = data.results.length - 1; i >= 0; i-- ) {
-          console.log('addmessage', data.results)
           app.addMessage( data.results[i] );
 
           var roomname = data.results[i].roomname;
@@ -101,10 +101,10 @@ app.clearMessages = function () {
 app.addMessage = function ( object ) {
   if ( app.room === 'All' ) {
     var message = Message( object );
-    $('#chats').prepend(message);   
+    $('#chats').append(message);   
   } else if ( object.roomname === app.room ) {
     var message = Message( object );
-    $('#chats').prepend(message);
+    $('#chats').append(message);
   }
 };
 

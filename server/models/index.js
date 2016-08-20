@@ -12,7 +12,6 @@ module.exports = {
       res.send('messp');
     },
     options: function(req, res) {
-      console.log('sdlfkj')
       res.send();
     } // a function which can be used to insert a message into the database
   },
