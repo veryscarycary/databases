@@ -4,6 +4,7 @@ var db = require('./db');
 // Middleware
 var morgan = require('morgan');
 var parser = require('body-parser');
+var cors = require('cors');
 
 // Router
 var router = require('./routes.js');
@@ -17,6 +18,7 @@ app.set('port', 3000);
 // Logging and parsing
 app.use(morgan('dev'));
 app.use(parser.json());
+app.use(cors());
 
 // Set up our routes
 app.use('/classes', router);
@@ -26,6 +28,7 @@ app.use(express.static(__dirname + '/../client'));
 
 // If we are being run directly, run the server.
 if (!module.parent) {
+  debugger;
   app.listen(app.get('port'));
   console.log('Listening on', app.get('port'));
 }

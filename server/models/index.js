@@ -10,6 +10,10 @@ module.exports = {
     }, // a function which produces all the messages
     post: function (req, res) {
       res.send('messp');
+    },
+    options: function(req, res) {
+      console.log('sdlfkj')
+      res.send();
     } // a function which can be used to insert a message into the database
   },
 

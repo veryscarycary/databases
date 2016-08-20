@@ -38,7 +38,7 @@ var Message = function (message) {
 
 app.lastMessage = 0;
 
-app.server = 'https://api.parse.com/1/classes/messages';
+app.server = 'http://127.0.0.1:3000/';
 
 app.init = function () {
   app.friends = {};
@@ -49,7 +49,7 @@ app.init = function () {
 // sends message via AJAX POST
 app.send = function (message) {
   $.ajax({
-    url: 'https://api.parse.com/1/classes/messages',
+    url: app.server + 'classes/messages',
     type: 'POST',
     data: JSON.stringify(message),
     contentType: 'application/json',
@@ -65,14 +65,17 @@ app.send = function (message) {
 // pulls data from server using AJAX GET, called from setInterval each second
 app.fetch = function () {
   var result = $.ajax({
-    url: 'https://api.parse.com/1/classes/messages',
+    url: app.server + 'classes/messages',
     type: 'GET',
     data: 'json',
     success: function(data) {
+      // console.log(json);
+      // var data = JSON.parse(json);
       if ( app.lastMessage !== data.results[0].objectId ) {
         app.clearMessages();
         app.lastMessage = data.results[0].objectId;
-        for ( var i = 99; i >= 0; i-- ) {
+        for ( var i = data.results.length - 1; i >= 0; i-- ) {
+          console.log('addmessage', data.results)
           app.addMessage( data.results[i] );
 
           var roomname = data.results[i].roomname;
